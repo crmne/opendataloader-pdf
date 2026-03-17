@@ -4,6 +4,8 @@
   "description": "OpenDataLoader PDF - Monorepo workspace",
   "scripts": {
     "build-java": "bash scripts/build-java.sh",
+    "build-ruby": "bash scripts/build-ruby.sh",
+    "test-ruby": "bash scripts/test-ruby.sh",
     "export-options": "npm run build-java && java -jar java/opendataloader-pdf-cli/target/opendataloader-pdf-cli-0.0.0.jar --export-options > options.json",
     "generate-options": "node scripts/generate-options.mjs",
     "sync-options": "npm run export-options && npm run generate-options",

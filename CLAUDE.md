@@ -2,7 +2,7 @@
 
 ## Gotchas
 
-After changing CLI options in Java, **must** run `npm run sync` — this regenerates `options.json` and all Python/Node.js bindings. Forgetting this silently breaks the wrappers.
+After changing CLI options in Java, **must** run `npm run sync` — this regenerates `options.json` and all Python/Node.js/Ruby bindings. Forgetting this silently breaks the wrappers.
 
 When using `--enrich-formula` or `--enrich-picture-description` on the hybrid server, the client **must** use `--hybrid-mode full`. Otherwise enrichments are silently skipped (they only run on the backend, not in Java).
 

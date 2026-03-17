@@ -220,6 +220,124 @@ function generateNodeConvertOptions() {
 }
 
 /**
+ * Generate Ruby CLI options metadata.
+ */
+function generateRubyCliOptions() {
+  const lines = [AUTO_GENERATED_HEADER_PYTHON];
+  lines.push('# frozen_string_literal: true');
+  lines.push('');
+  lines.push('module OpenDataLoader');
+  lines.push('  module PDF');
+  lines.push('    CLI_OPTIONS = [');
+
+  for (const opt of options.options) {
+    const snakeName = toSnakeCase(opt.name);
+    const defaultValue = opt.default === null ? 'nil'
+      : typeof opt.default === 'boolean' ? (opt.default ? 'true' : 'false')
+      : `'${escapeString(opt.default, "'")}'`;
+    const shortName = opt.shortName ? `'${opt.shortName}'` : 'nil';
+    const typeName = opt.type === 'boolean' ? ':boolean' : ':string';
+
+    lines.push('      {');
+    lines.push(`        name: '${opt.name}',`);
+    lines.push(`        ruby_name: :${snakeName},`);
+    lines.push(`        short_name: ${shortName},`);
+    lines.push(`        type: ${typeName},`);
+    lines.push(`        required: ${opt.required ? 'true' : 'false'},`);
+    lines.push(`        default: ${defaultValue},`);
+    lines.push(`        description: '${escapeString(opt.description, "'")}'`);
+    lines.push('      },');
+  }
+
+  lines.push('    ].freeze');
+  lines.push('');
+  lines.push('    def self.register_cli_options(parser, target)');
+  lines.push('      CLI_OPTIONS.each do |opt|');
+  lines.push('        flags = []');
+  lines.push("        flags << \"-#{opt[:short_name]}\" if opt[:short_name]");
+  lines.push('');
+  lines.push('        if opt[:type] == :boolean');
+  lines.push("          flags << \"--#{opt[:name]}\"");
+  lines.push('          parser.on(*flags, opt[:description]) do');
+  lines.push('            target[opt[:ruby_name]] = true');
+  lines.push('          end');
+  lines.push('        else');
+  lines.push("          flags << \"--#{opt[:name]} VALUE\"");
+  lines.push('          parser.on(*flags, String, opt[:description]) do |value|');
+  lines.push('            target[opt[:ruby_name]] = value');
+  lines.push('          end');
+  lines.push('        end');
+  lines.push('      end');
+  lines.push('    end');
+  lines.push('  end');
+  lines.push('end');
+  lines.push('');
+
+  const outputPath = join(ROOT_DIR, 'ruby/opendataloader-pdf/lib/opendataloader/pdf/cli_options_generated.rb');
+  mkdirSync(dirname(outputPath), { recursive: true });
+  writeFileSync(outputPath, lines.join('\n'));
+  console.log(`Generated: ${outputPath}`);
+}
+
+/**
+ * Generate Ruby convert options argument builder.
+ */
+function generateRubyConvertOptions() {
+  const lines = [AUTO_GENERATED_HEADER_PYTHON];
+  lines.push('# frozen_string_literal: true');
+  lines.push('');
+  lines.push('module OpenDataLoader');
+  lines.push('  module PDF');
+  lines.push('    module ConvertGenerated');
+  lines.push('      module_function');
+  lines.push('');
+  lines.push('      def build_args(');
+
+  for (const [index, opt] of options.options.entries()) {
+    const snakeName = toSnakeCase(opt.name);
+    const defaultVal = opt.type === 'boolean' ? (opt.default ? 'true' : 'false') : 'nil';
+    const trailingComma = index === options.options.length - 1 ? '' : ',';
+    lines.push(`        ${snakeName}: ${defaultVal}${trailingComma}`);
+  }
+
+  lines.push('      )');
+  lines.push('        args = []');
+  lines.push('');
+
+  for (const opt of options.options) {
+    const snakeName = toSnakeCase(opt.name);
+    const cliFlag = `--${opt.name}`;
+
+    if (opt.type === 'boolean') {
+      lines.push(`        args << '${cliFlag}' if ${snakeName}`);
+    } else if (isListOption(opt)) {
+      lines.push(`        unless ${snakeName}.nil?`);
+      lines.push(`          if ${snakeName}.is_a?(Array)`);
+      lines.push(`            args.concat(['${cliFlag}', ${snakeName}.join(',')]) unless ${snakeName}.empty?`);
+      lines.push('          else');
+      lines.push(`            args.concat(['${cliFlag}', ${snakeName}])`);
+      lines.push('          end');
+      lines.push('        end');
+    } else {
+      lines.push(`        args.concat(['${cliFlag}', ${snakeName}]) unless ${snakeName}.nil? || ${snakeName}.to_s.empty?`);
+    }
+  }
+
+  lines.push('');
+  lines.push('        args');
+  lines.push('      end');
+  lines.push('    end');
+  lines.push('  end');
+  lines.push('end');
+  lines.push('');
+
+  const outputPath = join(ROOT_DIR, 'ruby/opendataloader-pdf/lib/opendataloader/pdf/convert_generated.rb');
+  mkdirSync(dirname(outputPath), { recursive: true });
+  writeFileSync(outputPath, lines.join('\n'));
+  console.log(`Generated: ${outputPath}`);
+}
+
+/**
  * Generate Python CLI options file (cli_options.py)
  */
 function generatePythonCliOptions() {
@@ -454,6 +572,46 @@ function generateNodeConvertOptionsMdx() {
 }
 
 /**
+ * Generate Ruby convert() options table (MDX snippet)
+ */
+function generateRubyConvertOptionsMdx() {
+  const lines = [];
+  lines.push('---');
+  lines.push('title: Ruby Convert Options');
+  lines.push('description: Options for the Ruby convert function');
+  lines.push('---');
+  lines.push('');
+  lines.push(AUTO_GENERATED_HEADER_MDX);
+
+  const rows = [];
+
+  for (const opt of options.options) {
+    const snakeName = toSnakeCase(opt.name);
+    let rbType = 'string';
+    if (opt.type === 'boolean') {
+      rbType = 'boolean';
+    } else if (isListOption(opt)) {
+      rbType = String.raw`string \| string[]`;
+    }
+
+    const defaultVal = opt.default === null ? '-'
+      : typeof opt.default === 'boolean' ? `\`${opt.default}\``
+      : `\`"${opt.default}"\``;
+
+    const description = escapeMarkdown(opt.description);
+    rows.push([`\`${snakeName}\``, `\`${rbType}\``, defaultVal, description]);
+  }
+
+  lines.push(...formatTable(['Option', 'Type', 'Default', 'Description'], rows));
+  lines.push('');
+
+  const outputPath = join(ROOT_DIR, 'content/docs/_generated/ruby-convert-options.mdx');
+  mkdirSync(dirname(outputPath), { recursive: true });
+  writeFileSync(outputPath, lines.join('\n'));
+  console.log(`Generated: ${outputPath}`);
+}
+
+/**
  * Generate options reference documentation (MDX)
  */
 function generateOptionsReferenceMdx() {
@@ -538,10 +696,13 @@ console.log('Generating files from options.json...\n');
 
 generateNodeCliOptions();
 generateNodeConvertOptions();
+generateRubyCliOptions();
+generateRubyConvertOptions();
 generatePythonCliOptions();
 generatePythonConvert();
 generateOptionsReferenceMdx();
 generatePythonConvertOptionsMdx();
 generateNodeConvertOptionsMdx();
+generateRubyConvertOptionsMdx();
 
 console.log('\nDone!');

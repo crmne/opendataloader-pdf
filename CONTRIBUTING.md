@@ -79,11 +79,11 @@ To suggest a new feature:
    # Build Java packages
    npm run build-java
 
-   # If you changed CLI options in Java, sync bindings (regenerates options.json, Python/Node.js wrappers)
+   # If you changed CLI options in Java, sync bindings (regenerates options.json, Python/Node.js/Ruby wrappers)
    npm run sync
    ```
 
-   > **Important**: If you modified any CLI options in Java, you **must** run `npm run sync` before committing. This regenerates `options.json` and all Python/Node.js bindings. Forgetting this silently breaks the wrappers.
+   > **Important**: If you modified any CLI options in Java, you **must** run `npm run sync` before committing. This regenerates `options.json` and all Python/Node.js/Ruby bindings. Forgetting this silently breaks the wrappers.
 
 5. Make your changes and commit them.
 6. **Push** your branch:

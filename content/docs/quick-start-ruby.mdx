@@ -1,0 +1,65 @@
+---
+title: Quick Start with Ruby
+description: Install opendataloader-pdf and extract text, tables, and headings from PDF files using Ruby. Requires Java 11+ and Ruby 3.1+.
+keywords: [PDF parsing Ruby, PDF to Markdown Ruby, PDF to JSON Ruby, opendataloader-pdf gem]
+---
+
+The Ruby gem wraps the same CLI runtime used by Python and Node.js, with a Ruby-first API and executable.
+
+## Requirements
+
+- Ruby 3.1 or later
+- Java 11+ available on the system `PATH`
+
+Verify Java once before installing:
+
+```bash
+java -version
+```
+
+If `java` is not found, install a JDK:
+
+| OS | Install Command |
+|----|-----------------|
+| macOS | `brew install --cask temurin` or download from [Adoptium](https://adoptium.net/) |
+| Ubuntu/Debian | `sudo apt install openjdk-17-jdk` |
+| Windows | Download installer from [Adoptium](https://adoptium.net/) (adds to PATH automatically) |
+
+## Install
+
+```bash
+gem install opendataloader-pdf
+```
+
+## Convert from Ruby
+
+```ruby
+require 'opendataloader/pdf'
+
+OpenDataLoader::PDF.convert(
+  ['path/to/document.pdf', 'path/to/folder'],
+  output_dir: 'path/to/output',
+  format: 'json,html,pdf,markdown'
+)
+```
+
+### `convert()` options
+
+import RubyConvertOptions from './_generated/ruby-convert-options.mdx';
+
+<RubyConvertOptions />
+
+## CLI usage
+
+```bash
+opendataloader-pdf path/to/document.pdf path/to/folder \
+  -o path/to/output \
+  -f json,html,pdf,markdown
+```
+
+For CLI options, see the [CLI Options Reference](./cli-options-reference).
+
+## Next steps
+
+- Need schema details for downstream parsing? See the [JSON schema](./json-schema).
+- Building a retrieval pipeline? See the [RAG Integration Guide](./rag-integration).

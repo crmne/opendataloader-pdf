@@ -1,0 +1,35 @@
+---
+title: Ruby Convert Options
+description: Options for the Ruby convert function
+---
+
+{/* AUTO-GENERATED FROM options.json - DO NOT EDIT DIRECTLY */}
+{/* Run `npm run generate-options` to regenerate */}
+
+
+| Option                    | Type                 | Default      | Description                                                                                                                        |
+|---------------------------|----------------------|--------------|------------------------------------------------------------------------------------------------------------------------------------|
+| `output_dir`              | `string`             | -            | Directory where output files are written. Default: input file directory                                                            |
+| `password`                | `string`             | -            | Password for encrypted PDF files                                                                                                   |
+| `format`                  | `string \| string[]` | -            | Output formats (comma-separated). Values: json, text, html, pdf, markdown, markdown-with-html, markdown-with-images. Default: json |
+| `quiet`                   | `boolean`            | `false`      | Suppress console logging output                                                                                                    |
+| `content_safety_off`      | `string \| string[]` | -            | Disable content safety filters. Values: all, hidden-text, off-page, tiny, hidden-ocg                                               |
+| `sanitize`                | `boolean`            | `false`      | Enable sensitive data sanitization. Replaces emails, phone numbers, IPs, credit cards, and URLs with placeholders                  |
+| `keep_line_breaks`        | `boolean`            | `false`      | Preserve original line breaks in extracted text                                                                                    |
+| `replace_invalid_chars`   | `string`             | `" "`        | Replacement character for invalid/unrecognized characters. Default: space                                                          |
+| `use_struct_tree`         | `boolean`            | `false`      | Use PDF structure tree (tagged PDF) for reading order and semantic structure                                                       |
+| `table_method`            | `string`             | `"default"`  | Table detection method. Values: default (border-based), cluster (border + cluster). Default: default                               |
+| `reading_order`           | `string`             | `"xycut"`    | Reading order algorithm. Values: off, xycut. Default: xycut                                                                        |
+| `markdown_page_separator` | `string`             | -            | Separator between pages in Markdown output. Use %page-number% for page numbers. Default: none                                      |
+| `text_page_separator`     | `string`             | -            | Separator between pages in text output. Use %page-number% for page numbers. Default: none                                          |
+| `html_page_separator`     | `string`             | -            | Separator between pages in HTML output. Use %page-number% for page numbers. Default: none                                          |
+| `image_output`            | `string`             | `"external"` | Image output mode. Values: off (no images), embedded (Base64 data URIs), external (file references). Default: external             |
+| `image_format`            | `string`             | `"png"`      | Output format for extracted images. Values: png, jpeg. Default: png                                                                |
+| `image_dir`               | `string`             | -            | Directory for extracted images                                                                                                     |
+| `pages`                   | `string`             | -            | Pages to extract (e.g., "1,3,5-7"). Default: all pages                                                                             |
+| `include_header_footer`   | `boolean`            | `false`      | Include page headers and footers in output                                                                                         |
+| `hybrid`                  | `string`             | `"off"`      | Hybrid backend for AI processing. Values: off (default), docling-fast                                                              |
+| `hybrid_mode`             | `string`             | `"auto"`     | Hybrid triage mode. Values: auto (default, dynamic triage), full (skip triage, all pages to backend)                               |
+| `hybrid_url`              | `string`             | -            | Hybrid backend server URL (overrides default)                                                                                      |
+| `hybrid_timeout`          | `string`             | `"30000"`    | Hybrid backend request timeout in milliseconds. Default: 30000                                                                     |
+| `hybrid_fallback`         | `boolean`            | `false`      | Opt in to Java fallback on hybrid backend error (default: disabled)                                                                |

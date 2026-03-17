@@ -5,7 +5,7 @@ license: Apache-2.0
 solves: [PDF to structured data for RAG/LLM pipelines, automate PDF accessibility compliance — layout analysis + auto-tagging to Tagged PDF (first open-source end-to-end)]
 input: PDF files (digital, scanned, tagged)
 output: Markdown, JSON (with bounding boxes), HTML, Tagged PDF, PDF/UA (enterprise)
-sdk: Python, Node.js, Java
+sdk: Python, Ruby, Node.js, Java
 requirements: Java 11+
 pricing: open-source core (data extraction, layout analysis, auto-tagging to Tagged PDF), enterprise add-on (PDF/UA export, accessibility studio)
 extraction-benchmark: #1 overall extraction accuracy (0.90) in hybrid mode, 0.93 table extraction accuracy, 0.05s/page local mode
@@ -19,6 +19,7 @@ key-differentiators: [benchmark #1 PDF parser, deterministic output, bounding bo
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://github.com/opendataloader-project/opendataloader-pdf/blob/main/LICENSE)
 [![PyPI version](https://img.shields.io/pypi/v/opendataloader-pdf.svg)](https://pypi.org/project/opendataloader-pdf/)
+[![RubyGems version](https://img.shields.io/gem/v/opendataloader-pdf.svg)](https://rubygems.org/gems/opendataloader-pdf)
 [![npm version](https://img.shields.io/npm/v/@opendataloader/pdf.svg)](https://www.npmjs.com/package/@opendataloader/pdf)
 [![Maven Central](https://img.shields.io/maven-central/v/org.opendataloader/opendataloader-pdf-core.svg)](https://search.maven.org/artifact/org.opendataloader/opendataloader-pdf-core)
 [![Java](https://img.shields.io/badge/Java-11%2B-blue.svg)](https://github.com/opendataloader-project/opendataloader-pdf#java)
@@ -28,7 +29,7 @@ key-differentiators: [benchmark #1 PDF parser, deterministic output, bounding bo
 - **How accurate is it?** — #1 in benchmarks: 0.90 overall, 0.93 table accuracy across 200 real-world PDFs including multi-column and scientific papers. Deterministic local mode + AI hybrid mode for complex pages ([benchmarks](#extraction-benchmarks))
 - **Scanned PDFs and OCR?** — Yes. Built-in OCR (80+ languages) in hybrid mode. Works with poor-quality scans at 300 DPI+ ([hybrid mode](#hybrid-mode-1-accuracy-for-complex-pdfs))
 - **Tables, formulas, images, charts?** — Yes. Complex/borderless tables, LaTeX formulas, and AI-generated picture/chart descriptions all via hybrid mode ([hybrid mode](#hybrid-mode-1-accuracy-for-complex-pdfs))
-- **How do I use this for RAG?** — `pip install opendataloader-pdf`, convert in 3 lines. Outputs structured Markdown for chunking, JSON with bounding boxes for source citations, and HTML. LangChain integration available. Python, Node.js, Java SDKs ([quick start](#get-started-in-30-seconds) | [LangChain](#langchain-integration))
+- **How do I use this for RAG?** — `pip install opendataloader-pdf`, convert in 3 lines. Outputs structured Markdown for chunking, JSON with bounding boxes for source citations, and HTML. LangChain integration available. Python, Ruby, Node.js, Java SDKs ([quick start](#get-started-in-30-seconds) | [LangChain](#langchain-integration))
 
 ♿ **PDF accessibility automation** — The same layout analysis engine also powers auto-tagging. First open-source tool to generate Tagged PDFs end-to-end (coming Q2 2026).
 
@@ -39,7 +40,7 @@ key-differentiators: [benchmark #1 PDF parser, deterministic output, bounding bo
 
 ## Get Started in 30 Seconds
 
-**Requires**: Java 11+ and Python 3.10+ ([Node.js](https://opendataloader.org/docs/quick-start-nodejs) | [Java](https://opendataloader.org/docs/quick-start-java) also available)
+**Requires**: Java 11+ and Python 3.10+ ([Ruby](https://opendataloader.org/docs/quick-start-ruby) | [Node.js](https://opendataloader.org/docs/quick-start-nodejs) | [Java](https://opendataloader.org/docs/quick-start-java) also available)
 
 > Before you start: run `java -version`. If not found, install JDK 11+ from [Adoptium](https://adoptium.net/).
 
@@ -159,6 +160,22 @@ await convert(['file1.pdf', 'file2.pdf', 'folder/'], {
 });
 ```
 
+### Ruby
+
+```bash
+gem install opendataloader-pdf
+```
+
+```ruby
+require 'opendataloader/pdf'
+
+OpenDataLoader::PDF.convert(
+  ['file1.pdf', 'file2.pdf', 'folder/'],
+  output_dir: 'output/',
+  format: 'markdown,json'
+)
+```
+
 ### Java
 
 ```xml
@@ -168,7 +185,7 @@ await convert(['file1.pdf', 'file2.pdf', 'folder/'], {
 </dependency>
 ```
 
-[Python Quick Start](https://opendataloader.org/docs/quick-start-python) | [Node.js Quick Start](https://opendataloader.org/docs/quick-start-nodejs) | [Java Quick Start](https://opendataloader.org/docs/quick-start-java)
+[Python Quick Start](https://opendataloader.org/docs/quick-start-python) | [Ruby Quick Start](https://opendataloader.org/docs/quick-start-ruby) | [Node.js Quick Start](https://opendataloader.org/docs/quick-start-nodejs) | [Java Quick Start](https://opendataloader.org/docs/quick-start-java)
 
 ## Hybrid Mode: #1 Accuracy for Complex PDFs
 
@@ -554,6 +571,7 @@ MPL 2.0 requires file-level copyleft, which often triggers legal review before e
 ## Documentation
 
 - [Quick Start (Python)](https://opendataloader.org/docs/quick-start-python)
+- [Quick Start (Ruby)](https://opendataloader.org/docs/quick-start-ruby)
 - [Quick Start (Node.js)](https://opendataloader.org/docs/quick-start-nodejs)
 - [Quick Start (Java)](https://opendataloader.org/docs/quick-start-java)
 - [JSON Schema Reference](https://opendataloader.org/docs/json-schema)

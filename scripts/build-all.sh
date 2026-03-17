@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Build and test all packages: Java, Python, Node.js
+# Build and test all packages: Java, Python, Node.js, Ruby
 # Usage: ./scripts/build-all.sh [VERSION]
 # Example: ./scripts/build-all.sh 1.0.0
 # If VERSION is not provided, defaults to "0.0.0"
@@ -24,6 +24,9 @@ command -v mvn >/dev/null || { echo "Error: mvn not found"; exit 1; }
 command -v uv >/dev/null || { echo "Error: uv not found. Install with: curl -LsSf https://astral.sh/uv/install.sh | sh"; exit 1; }
 command -v node >/dev/null || { echo "Error: node not found"; exit 1; }
 command -v pnpm >/dev/null || { echo "Error: pnpm not found"; exit 1; }
+command -v ruby >/dev/null || { echo "Error: ruby not found"; exit 1; }
+command -v bundle >/dev/null || { echo "Error: bundle not found. Install with: gem install bundler"; exit 1; }
+command -v gem >/dev/null || { echo "Error: gem not found"; exit 1; }
 
 echo "All prerequisites found."
 
@@ -36,40 +39,53 @@ echo "========================================"
 # Java Build & Test
 # =================================================================
 echo ""
-echo "[1/3] Java: Building and testing..."
+echo "[1/4] Java: Building and testing..."
 echo "----------------------------------------"
 
 cd "$ROOT_DIR/java"
 mvn versions:set -DnewVersion="$VERSION" -DgenerateBackupPoms=false
 "$SCRIPT_DIR/build-java.sh"
 
-echo "[1/3] Java: Done"
+echo "[1/4] Java: Done"
 
 # =================================================================
 # Python Build & Test
 # =================================================================
 echo ""
-echo "[2/3] Python: Building and testing..."
+echo "[2/4] Python: Building and testing..."
 echo "----------------------------------------"
 
 cd "$ROOT_DIR/python/opendataloader-pdf"
 sed -i.bak "s/^version = \"[^\"]*\"/version = \"$VERSION\"/" pyproject.toml && rm -f pyproject.toml.bak
 "$SCRIPT_DIR/build-python.sh"
 
-echo "[2/3] Python: Done"
+echo "[2/4] Python: Done"
 
 # =================================================================
 # Node.js Build & Test
 # =================================================================
 echo ""
-echo "[3/3] Node.js: Building and testing..."
+echo "[3/4] Node.js: Building and testing..."
 echo "----------------------------------------"
 
 cd "$ROOT_DIR/node/opendataloader-pdf"
 pnpm version "$VERSION" --no-git-tag-version --allow-same-version
 "$SCRIPT_DIR/build-node.sh"
 
-echo "[3/3] Node.js: Done"
+echo "[3/4] Node.js: Done"
+
+# =================================================================
+# Ruby Build & Test
+# =================================================================
+echo ""
+echo "[4/4] Ruby: Building and testing..."
+echo "----------------------------------------"
+
+cd "$ROOT_DIR/ruby/opendataloader-pdf"
+sed -i.bak "s/^    VERSION = '.*'/    VERSION = '$VERSION'/" lib/opendataloader/pdf/version.rb && rm -f lib/opendataloader/pdf/version.rb.bak
+"$SCRIPT_DIR/build-ruby.sh"
+
+echo "[4/4] Ruby: Done"
 
 # =================================================================
 # Summary

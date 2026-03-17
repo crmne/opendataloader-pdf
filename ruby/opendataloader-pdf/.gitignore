@@ -1,0 +1,11 @@
+.bundle/
+coverage/
+jar/*.jar
+pkg/
+*.gem
+tmp/
+Gemfile.lock
+README.md
+LICENSE
+NOTICE
+THIRD_PARTY/
